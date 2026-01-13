@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Menor Xiter</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{
+  background:#000;color:#fff;overflow:hidden;
+}
+
+/* FUNDO */
+.bg{
+  position:fixed;inset:0;
+  background:
+  repeating-linear-gradient(90deg, rgba(255,0,0,.15) 0 1px, transparent 1px 40px),
+  repeating-linear-gradient(180deg, rgba(255,0,0,.15) 0 1px, transparent 1px 40px);
+  opacity:.4;pointer-events:none;
+}
+
+/* LOGIN */
+#login{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.login-box{
+  width:320px;
+  background:#0a0a0a;
+  border:2px solid red;
+  box-shadow:0 0 25px red;
+  padding:25px;
+}
+.login-box h1{
+  text-align:center;color:red;margin-bottom:20px;
+}
+.login-box input{
+  width:100%;padding:12px;
+  margin-bottom:15px;
+  background:#000;border:1px solid red;color:#fff;
+}
+.login-box button{
+  width:100%;padding:12px;
+  background:red;color:#000;
+  font-weight:bold;border:none;
+}
+
+/* PAINEL */
+.panel{
+  position:absolute;
+  top:120px;left:40px;
+  width:360px;
+  background:#0b0b0b;
+  border:2px solid red;
+  box-shadow:0 0 30px red;
+}
+.hidden{display:none}
+
+/* DRAG */
+.drag-bar{
+  height:35px;
+  cursor:move;
+}
+
+/* MENU */
+.menu{
+  display:flex;border-bottom:1px solid red;
+}
+.menu button{
+  flex:1;padding:10px;
+  background:#000;border:none;color:#fff;
+}
+.menu button.active{
+  background:red;color:#000;
+}
+
+/* CONTEÚDO */
+.content{padding:15px}
+.tab{display:none}
+.tab.active{display:block}
+
+/* CONTROLES */
+.control{
+  margin-bottom:15px;
+}
+.control label{
+  display:flex;justify-content:space-between;
+  margin-bottom:5px;
+}
+input[type=range]{width:100%}
+
+/* TOGGLE */
+.toggle{
+  display:flex;justify-content:space-between;
+  margin-bottom:12px;
+}
+.toggle input{transform:scale(1.3)}
+</style>
+</head>
+
+<body>
+<div class="bg"></div>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-box">
+    <h1>MENOR XITER</h1>
+    <input type="text" placeholder="Usuário" id="user">
+    <input type="password" placeholder="Key" id="key">
+    <button onclick="entrar()">ENTRAR</button>
+  </div>
+</div>
+
+<!-- PAINEL -->
+<div class="panel hidden" id="panel">
+  <div class="drag-bar" id="dragBar"></div>
+
+  <div class="menu">
+    <button class="btn active" onclick="showTab('aim',this)">AIMBOT</button>
+    <button class="btn" onclick="showTab('arma',this)">ARMA</button>
+    <button class="btn" onclick="showTab('div',this)">DIVERSOS</button>
+  </div>
+
+  <div class="content">
+    <!-- AIMBOT -->
+    <div class="tab active" id="aim">
+      <div class="toggle">
+        <span>AimBot</span><input type="checkbox">
+      </div>
+
+      <div class="control">
+        <label><span>FOV</span><span>95%</span></label>
+        <input type="range" value="95">
+      </div>
+
+      <div class="control">
+        <label><span>Precisão</span><span>90%</span></label>
+        <input type="range" value="90">
+      </div>
+    </div>
+
+    <!-- ARMA -->
+    <div class="tab" id="arma">
+      <div class="toggle">
+        <span>Controle de Recuo</span><input type="checkbox">
+      </div>
+      <div class="control">
+        <label><span>Recuo</span><span>70%</span></label>
+        <input type="range" value="70">
+      </div>
+    </div>
+
+    <!-- DIVERSOS -->
+    <div class="tab" id="div">
+      <div class="toggle">
+        <span>Ativar 120 FPS</span><input type="checkbox">
+      </div>
+      <div class="toggle">
+        <span>Otimização</span><input type="checkbox">
+      </div>
+      <p style="color:red;margin-top:10px">Instalar App</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function entrar(){
+  if(
+    document.getElementById("user").value === "Menor Xiter" &&
+    document.getElementById("key").value === "MenorXiter"
+  ){
+    login.classList.add("hidden");
+    panel.classList.remove("hidden");
+  }else{
+    alert("Key incorreta");
+  }
+}
+
+function showTab(id,el){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  el.classList.add("active");
+}
+
+/* FLUTUANTE */
+const panel = document.getElementById("panel");
+const dragBar = document.getElementById("dragBar");
+let drag=false,ox=0,oy=0;
+
+dragBar.onmousedown = dragBar.ontouchstart = e=>{
+  drag=true;
+  let ev=e.touches?e.touches[0]:e;
+  ox=ev.clientX-panel.offsetLeft;
+  oy=ev.clientY-panel.offsetTop;
+};
+
+document.onmousemove = document.ontouchmove = e=>{
+  if(!drag)return;
+  let ev=e.touches?e.touches[0]:e;
+  panel.style.left=(ev.clientX-ox)+"px";
+  panel.style.top=(ev.clientY-oy)+"px";
+};
+
+document.onmouseup = document.ontouchend = ()=>drag=false;
+</script>
+</body>
+</html>
